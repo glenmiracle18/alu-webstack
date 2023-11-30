@@ -13,10 +13,14 @@ audit_subdomain() {
     fi
 
     for sub in "${subdomains[@]}"; do
-        record_type=$(dig +short -t CNAME "$sub.$domain" | awk '{print length($0) ? "CNAME" : "A"}')
+        record_type=$(dig +short -t A "$sub.$domain" | awk '{ if (NF) { print "A" } else { print "CNAME" } }')
         destination=$(dig +short "$sub.$domain")
-
-        echo "The subdomain $sub is a $record_type record and points to $destination"
+	
+	if [ -n "$destination" ]; then
+        	echo "The subdomain $sub is a $record_type record and points to $destination"
+	else
+		echo "No DNS record found for subdomain $sub"
+	fi
     done
 }
 
