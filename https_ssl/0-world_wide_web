@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# bashscript to check for subdomains
 
 audit_subdomain() {
     local domain=$1
